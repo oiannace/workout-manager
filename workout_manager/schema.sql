@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS exercise_stats;
+DROP TABLE IF EXISTS workout;
 
 CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -17,13 +18,3 @@ CREATE TABLE exercise_stats (
   FOREIGN KEY (user_id) REFERENCES user (id)
 );
 
-CREATE TABLE workout (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  exercise_id INTEGER NOT NULL,
-  user_id INTEGER NOT NULL,
-  year INTEGER NOT NULL,
-  month INTEGER NOT NULL,
-  day INTEGER NOT NULL,
-  FOREIGN KEY (exercise_id) REFERENCES exercise_stats (id)
-  FOREIGN KEY (user_id) REFERENCES user (id)
-);

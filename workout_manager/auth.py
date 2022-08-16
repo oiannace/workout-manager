@@ -10,7 +10,7 @@ from workout_manager.db import get_db
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
-@bp.route('/register', methods=('GET', 'POST'))
+@bp.route('/register', methods=('POST',))
 def register():
     if request.method == 'POST':
         username = request.form['username']
@@ -32,13 +32,12 @@ def register():
                 db.commit()
             except db.IntegrityError:
                 error = f"User {username} is already registered."
-            #else:
-                #return redirect(url_for("auth.login"))
+            
         flash(error)
-        print(username, password)
+        
     return jsonify({"msg":"You registered"})
 
-@bp.route('/login', methods=('GET', 'POST'))
+@bp.route('/login', methods=('POST',))
 def login():
     if request.method == 'POST':
         username = request.form['username']

@@ -17,14 +17,14 @@ def add():
     if request.method == 'POST':
         exercise_json = request.json
         error = None
-        print(exercise_json, get_jwt_identity())
+        
         
         db = get_db()
         user_id = db.execute(
             'SELECT id FROM user WHERE username = ?', (get_jwt_identity(),)
         ).fetchone()
         user_id = tuple(user_id)[0]
-        print(user_id)
+        
         
         if not exercise_json.get('exercise_name'):
             error = 'Title is required.'
@@ -39,11 +39,12 @@ def add():
                 (user_id, exercise_json.get('exercise_name'), exercise_json.get('num_sets'), exercise_json.get('num_reps'), exercise_json.get('weight'))
             )
             db.commit()
-            #return redirect(url_for('blog.index'))
+            
 
-    return "end of add"
+    return "Post success"
 
 @bp.route('/get-stats', methods=('GET',))
+@jwt_required
 def get_stats():
     
     db = get_db()
@@ -54,5 +55,5 @@ def get_stats():
     ).fetchall()
     exercise_stats_tuple = [tuple(row) for row in exercise_stats]
     
-    return json.dumps(exercise_stats_tuple)
+    return jsonify(exercise_name=exercise_stats_tuple[0][0], num_sets=exercise_stats_tuple[0][1], num_reps=exercise_stats_tuple[0][2], weight=exercise_stats_tuple[0][3])
     

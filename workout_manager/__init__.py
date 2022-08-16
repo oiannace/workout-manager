@@ -1,9 +1,8 @@
 import os
 
 from flask import Flask
-from . import (db, auth, extensions, exercise, workout)
-#from . import auth
-#from . import extensions
+from . import (db, auth, extensions, exercise)
+
 
 def create_app(test_config=None):
     # create and configure the app
@@ -26,15 +25,11 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
-
-    # a simple page that says hello
-    @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
     
     extensions.jwt.init_app(app)
-    db.init_app(app)
+    
     app.register_blueprint(auth.bp)
     app.register_blueprint(exercise.bp)
-    app.register_blueprint(workout.bp)
+    
+    db.init_app(app)
     return app
