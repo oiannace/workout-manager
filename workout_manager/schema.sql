@@ -16,3 +16,14 @@ CREATE TABLE exercise_stats (
   weight INTEGER NOT NULL,
   FOREIGN KEY (user_id) REFERENCES user (id)
 );
+
+CREATE TABLE workout (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  exercise_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
+  year INTEGER NOT NULL,
+  month INTEGER NOT NULL,
+  day INTEGER NOT NULL,
+  FOREIGN KEY (exercise_id) REFERENCES exercise_stats (id)
+  FOREIGN KEY (user_id) REFERENCES user (id)
+);

@@ -35,7 +35,7 @@ def register():
             #else:
                 #return redirect(url_for("auth.login"))
         flash(error)
-
+        print(username, password)
     return jsonify({"msg":"You registered"})
 
 @bp.route('/login', methods=('GET', 'POST'))

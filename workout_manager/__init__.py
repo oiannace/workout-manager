@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask
-from . import (db, auth, extensions, exercise)
+from . import (db, auth, extensions, exercise, workout)
 #from . import auth
 #from . import extensions
 
@@ -36,4 +36,5 @@ def create_app(test_config=None):
     db.init_app(app)
     app.register_blueprint(auth.bp)
     app.register_blueprint(exercise.bp)
+    app.register_blueprint(workout.bp)
     return app

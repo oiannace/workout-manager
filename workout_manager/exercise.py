@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for
+    Blueprint, flash, g, redirect, render_template, request, url_for, jsonify
 )
 from flask_jwt_extended import (jwt_required, get_jwt_identity)
 
@@ -7,9 +7,11 @@ from werkzeug.exceptions import abort
 
 from workout_manager.db import get_db
 
+import json
+
 bp = Blueprint('exercise', __name__, url_prefix='/exercise')
 
-@bp.route('/add', methods=['POST'])
+@bp.route('/add', methods=('POST',))
 @jwt_required()
 def add():
     if request.method == 'POST':
@@ -19,8 +21,9 @@ def add():
         
         db = get_db()
         user_id = db.execute(
-            'SELECT id FROM user WHERE username = ?', (get_jwt_identity())
+            'SELECT id FROM user WHERE username = ?', (get_jwt_identity(),)
         ).fetchone()
+        user_id = tuple(user_id)[0]
         print(user_id)
         
         if not exercise_json.get('exercise_name'):
@@ -39,3 +42,17 @@ def add():
             #return redirect(url_for('blog.index'))
 
     return "end of add"
+
+@bp.route('/get-stats', methods=('GET',))
+def get_stats():
+    
+    db = get_db()
+    exercise_name = request.args.get('exercise_name')
+    
+    exercise_stats = db.execute(
+        'SELECT exercise_name, num_sets, num_reps, weight FROM exercise_stats WHERE exercise_name = ?', (exercise_name,)
+    ).fetchall()
+    exercise_stats_tuple = [tuple(row) for row in exercise_stats]
+    
+    return json.dumps(exercise_stats_tuple)
+    
