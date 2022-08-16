@@ -1,0 +1,18 @@
+DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS exercise_stats;
+
+CREATE TABLE user (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username TEXT UNIQUE NOT NULL,
+  password TEXT NOT NULL
+);
+
+CREATE TABLE exercise_stats (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  exercise_name TEXT NOT NULL,
+  num_sets INTEGER NOT NULL,
+  num_reps INTEGER NOT NULL,
+  weight INTEGER NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES user (id)
+);
