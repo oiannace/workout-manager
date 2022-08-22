@@ -5,6 +5,7 @@ from models import Schema
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 import json
+import time
 
 app = Flask(__name__)
 app.config["JWT_SECRET_KEY"] = "super-secret"
@@ -30,21 +31,28 @@ def create_exercise():
     return jsonify(exerciseService().create(request.get_json()))
 
 
-@app.route("/exercise/<item_id>", methods=["PUT"])
+@app.route("/exercise/<exercise_id>", methods=["PUT"])
 @jwt_required()
-def update_item(item_id):
-    return jsonify(exerciseService().update(item_id, request.get_json()))
+def update_item(exercise_id):
+    return jsonify(exerciseService().update(exercise_id, request.get_json()))
 
-@app.route("/exercise/<item_id>", methods=["GET"])
+@app.route("/exercise/<exercise_id>", methods=["GET"])
 @jwt_required()
-def get_item(item_id):
-    return jsonify(exerciseService().get_by_id(item_id))
+def get_item(exercise_id):
+    return jsonify(exerciseService().get_by_id(exercise_id))
 
-@app.route("/exercise/<item_id>", methods=["DELETE"])
+@app.route("/exercise/<exercise_id>", methods=["DELETE"])
 @jwt_required()
-def delete_item(item_id):
-    return jsonify(exerciseService().delete(item_id))
+def delete_item(exercise_id):
+    return jsonify(exerciseService().delete_by_id(exercise_id))
+
+@app.route("/exercise/name/<exercise_name>", methods=["GET"])
+@jwt_required()
+def get_item_by_name(exercise_name):
+    return jsonify(exerciseService().get_by_name(exercise_name))
+
 
 if __name__ == "__main__":
+    time.sleep(5)
     Schema()
     app.run(debug=True, host='0.0.0.0', port=8888)
