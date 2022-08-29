@@ -10,4 +10,3 @@ RUN pip3 install -r requirements.txt
 
 COPY . /workout_manager
 
-CMD [ "python3", "workout_manager/app.py" ]

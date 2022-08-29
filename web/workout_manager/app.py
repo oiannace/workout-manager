@@ -2,6 +2,8 @@ from flask import Flask, request, jsonify
 from service import (exerciseService, userService)
 from models import Schema
 
+from flask.cli import FlaskGroup
+
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 import json
@@ -10,6 +12,11 @@ import time
 app = Flask(__name__)
 app.config["JWT_SECRET_KEY"] = "super-secret"
 jwt = JWTManager(app)
+cli = FlaskGroup(app)
+
+@cli.command("init_db")
+def init_db():
+    Schema()
 
 @app.route('/register', methods=('POST',))
 def register():
@@ -53,6 +60,4 @@ def get_item_by_name(exercise_name):
 
 
 if __name__ == "__main__":
-    time.sleep(5)
-    Schema()
-    app.run(debug=True, host='0.0.0.0', port=8888)
+    cli()
